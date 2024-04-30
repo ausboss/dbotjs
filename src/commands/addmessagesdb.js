@@ -1,5 +1,5 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { indexMessagesInChroma } from "../memory/rag/index-messages.js";
+import indexMessagesInChroma from "../memory/rag/index-messages.js";
 
 // slash command from user to add messages to the database for that channel
 const create = () => {
@@ -14,13 +14,11 @@ const create = () => {
 
 // Called by the interactionCreate event listener when the corresponding command is invoked
 const invoke = async (interaction) => {
-  const messages = await interaction.channel.messages.fetch();
-  const channelId = interaction.channel.id;
-  const { count } = await indexMessagesInChroma(messages, channelId);
+  await indexMessagesInChroma(interaction);
 
   // Reply with a confirmation
   interaction.reply({
-    content: `I added ${count} messages to the database for you!`,
+    content: `I added messages to the database for you!`,
     ephemeral: true,
   });
 };
