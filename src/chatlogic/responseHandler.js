@@ -5,6 +5,7 @@ import { logDetailedMessage } from "../memory/chatLog.js";
 import getMessageType from "../helpers/message-type.js";
 import { prepareMessageParts } from "../helpers/splitMessages.js";
 import { Attachment } from "discord.js";
+import { resetTimers } from "../events/timers.js";
 
 // Function to log a message with its caption response
 async function logMessage(message, client, captionResponse) {
@@ -38,7 +39,7 @@ async function sendMessageParts(content, message, client, botName) {
 
 // Function to handle attachments in a message
 async function handleAttachments(message) {
-  console.log("message.attachments: ", message.attachments);
+  // console.log("message.attachments: ", message.attachments);
   // Return an empty string if there are no attachments
   if (message.attachments.size === 0) return "";
 
@@ -146,7 +147,10 @@ async function processMessage(message, client) {
       const shouldReturn =
         (await handleChannelMessage(message, client, captionResponse)) ||
         handleChannelReply(message, client);
-      if (shouldReturn) return;
+      if (shouldReturn) {
+        await resetTimers(client, message);
+        return;
+      }
     } else {
       // Log the message if it's not a channel message
       await logMessage(message, client, captionResponse);

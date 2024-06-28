@@ -22,6 +22,8 @@ try {
 }
 // Centralized configuration object
 const config = {
+  inactivityPeriod: configJson.inactivityPeriod || 1000,
+  summaryPeriod: configJson.summaryPeriod || 60000,
   llavaBaseUrl: configJson.llavaBaseUrl || "",
   botToken: process.env.BOT_TOKEN,
   ignorePatterns: configJson.ignorePatterns || [],
